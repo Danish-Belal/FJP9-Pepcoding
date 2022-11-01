@@ -7,16 +7,30 @@ import { doc, onSnapshot } from "firebase/firestore";
 import {db} from '../firebase'
 function Profile() {
   const [userData, setUserData] = useState({});
-  const [posts, setPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const [postIds, setPostIds] = useState([]);
   const { user } = useContext(AuthContext);
   useEffect(() => {
     console.log("user", user);
     const unsub = onSnapshot(doc(db, "users", user.uid), (doc) => {
       console.log("doc", doc.data());
       setUserData(doc.data());
+      setPostIds(doc.data().posts)
     });
     return () => unsub();
   }, [user]);
+
+
+  useEffect(()=>{
+    let tempArr=[];
+    postIds.map(pid=>{
+      onSnapshot(doc(db,'posts',pid),(doc)=>{
+        tempArr.push(doc.data());
+        setUserPosts([...tempArr]);
+        console.log("timon",tempArr);
+      })
+    })
+  },[postIds])
   return (
     <div>
       <Navbar userData={userData} />
@@ -31,15 +45,11 @@ function Profile() {
           </div>
         </div>
         <div className="profile-posts">
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
-          <video src=""></video>
+          {
+            userPosts.map(post=>(
+              <video src={post.postURL}/>
+            ))
+          }
         </div>
       </div>
     </div>

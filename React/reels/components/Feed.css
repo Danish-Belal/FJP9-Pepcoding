@@ -54,19 +54,37 @@ overflow-y: scroll;
     border-radius: 20px;
     object-fit: contain;
 }
+
 .videos-info{
     position: absolute;
     width: 20rem;
     display: flex;
     justify-content: space-between;
     height: 3rem;
-    margin
+    bottom: 35px;
 }
 
+.avatar-container{
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 70%;
+}
 
-@media screen and (max-width:500px){
+.avatar-container>p{
+    margin-left: 0.2rem;
+}
+
+.post-like{
+    width:20%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 3rem;
+}
+/* @media screen and (max-width:500px){
     .nav-icons{
         display: none;
     }
-}
+} */
 
