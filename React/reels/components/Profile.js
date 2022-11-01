@@ -31,6 +31,7 @@ function Profile() {
       })
     })
   },[postIds])
+  
   return (
     <div>
       <Navbar userData={userData} />
