@@ -1,43 +1,92 @@
-import { Avatar } from '@mui/material'
+import { Avatar, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import {db} from '../firebase'
-function Post({postData, userData}) {
+import { db } from '../firebase'
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+function Post({ postData, userData }) {
 
-  const[like,setLike]=useState(false);
+  const [like, setLike] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  useEffect(()=>{
-    if(postData.likes.includes(userData.uid)){
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (postData.likes.includes(userData.uid)) {
       setLike(true);
     }
     else setLike(false);
-  },[postData])
+  }, [postData])
 
-  const handleLike=async()=>{
-    if(like){
+  const handleLike = async () => {
+    if (like) {
       await updateDoc(doc(db, "posts", postData.postId), {
-        likes:arrayRemove(userData.uid)
+        likes: arrayRemove(userData.uid)
       });
     }
-    else{
+    else {
       await updateDoc(doc(db, "posts", postData.postId), {
-        likes:arrayUnion(userData.uid)
+        likes: arrayUnion(userData.uid)
       });
     }
   }
 
   return (
     <div className="post-container">
-          <video src={postData.postURL} />
+      <video src={postData.postURL} />
       <div className="videos-info">
         <div className="avatar-container">
-                  <Avatar alt="Remy Sharp" src={postData.profilePhotoURL} />
-                  <p style={{color:"white"}}>{ postData.profileName}</p>
+          <Avatar alt="Remy Sharp" src={postData.profilePhotoURL} />
+          <p style={{ color: "white" }}>{postData.profileName}</p>
         </div>
-        <div className="post-like" style={like ? {color:"red"}:{color:"white"}}>
-          <FavoriteIcon onClick={handleLike}/>
-                  <p style={{color:"white"}}>{ postData.likes.length}</p>
+        <div className="post-like" style={like ? { color: "red" } : { color: "white" }}>
+          <FavoriteIcon onClick={handleLike} />
+          <p style={{ color: "white" }}>{postData.likes.length}</p>
+          <AddCommentIcon onClick={handleClickOpen} />
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth={true}
+            maxWidth='md'
+          >
+            <div className='modal-container'>
+              <div className='video-modal'>
+                <video src={postData.postURL} />
+              </div>
+              <div className='comments-modal'>
+                <Card className='card1'></Card>
+                <Card className='card2' sx={{ maxWidth: 345 }}>
+                  <Typography sx={{display:"flex"}}>
+                    {postData.likes.length==0?'Be the first one to like this post':`Liked by ${postData.likes.length} users`}
+                  </Typography>
+                  <div className='post-like2'>
+                    <FavoriteIcon style={like?{color:"red"}:{color:"black"}} onClick={handleLike}/>
+                    <TextField id="outlined-basic" label="Add Comment" variant="outlined" />
+                    <Button variant='contained'>Post</Button>
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </Dialog>
         </div>
       </div>
     </div>
