@@ -15,8 +15,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Comment from './Comment';
 function Post({ postData, userData }) {
-
+  console.log("yolo", postData);
   const [like, setLike] = useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -74,14 +75,13 @@ function Post({ postData, userData }) {
               </div>
               <div className='comments-modal'>
                 <Card className='card1'></Card>
-                <Card className='card2' sx={{ maxWidth: 345 }}>
+                <Card className='card2'>
                   <Typography sx={{display:"flex"}}>
                     {postData.likes.length==0?'Be the first one to like this post':`Liked by ${postData.likes.length} users`}
                   </Typography>
                   <div className='post-like2'>
                     <FavoriteIcon style={like?{color:"red"}:{color:"black"}} onClick={handleLike}/>
-                    <TextField id="outlined-basic" label="Add Comment" variant="outlined" />
-                    <Button variant='contained'>Post</Button>
+                    <Comment userData={userData} postData={postData}/>
                   </div>
                 </Card>
               </div>

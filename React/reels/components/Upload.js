@@ -62,6 +62,7 @@ function Upload({ userData }) {
             profileName: userData.fullName,
             profilePhotoURL: userData.profilePhoto,
             userId: userData.uid,
+            comments:[],
             timestamp:serverTimestamp()
           };
           console.log("postData",postData);
