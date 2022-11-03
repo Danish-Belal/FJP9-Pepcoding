@@ -16,6 +16,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Comment from './Comment';
+import DisplayComments from './DisplayComments';
 function Post({ postData, userData }) {
   console.log("yolo", postData);
   const [like, setLike] = useState(false);
@@ -74,7 +75,9 @@ function Post({ postData, userData }) {
                 <video src={postData.postURL} />
               </div>
               <div className='comments-modal'>
-                <Card className='card1'></Card>
+                <Card className='card1'>
+                  <DisplayComments postData={postData}/>
+                </Card>
                 <Card className='card2'>
                   <Typography sx={{display:"flex"}}>
                     {postData.likes.length==0?'Be the first one to like this post':`Liked by ${postData.likes.length} users`}
